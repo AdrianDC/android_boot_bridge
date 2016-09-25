@@ -47,3 +47,6 @@ LOCAL_SRC_FILES := src/libbootimg.c
 LOCAL_MODULE := libbootimg
 LOCAL_MODULE_TAGS := eng
 include $(BUILD_STATIC_LIBRARY)
+
+# bbootimg_bridge
+include $(LOCAL_PATH)/bbootimg_bridge/Android.mk
