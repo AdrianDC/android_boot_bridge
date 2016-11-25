@@ -1,10 +1,31 @@
-# libbootimg
-[![Build Status](https://travis-ci.org/Tasssadar/libbootimg.png?branch=master)](https://travis-ci.org/Tasssadar/libbootimg)
+# BootBridge for Sony ELF
+ * <b>[See the project on XDA](http://forum.xda-developers.com/-/-/-t3506883)</b>
 
-libbootimg is small library which can create, extract or update Android boot images.
+## What are Sony ELF bootimages
 
-**This library is required to build MultiROM and its modified TWRP. Clone it to
-`/system/extras/libbootimg` inside the Android source tree.**
+ * Devices like the Sony Xperia SP,
+    T, TX, V or other from these generations
+    use a bootimage structure different
+    to the usual Android boot partitions
 
-### bbootimg
-`bbootimg` is a cli frontend for libbootimg, compatible with abootimg's arguments.
+ * BootBridge is meant to simulate
+    a normal bootimage, edit it
+    then update the Sony ELF boot
+
+## Where does the user have to do something
+
+ * Simply open the zip, and replace the
+    install/install.zip with the renamed
+    flashable you want to install
+
+## How the project works and what it does
+ * Creates a new temporary bootimage
+    using the regular Android structure
+    and link it in the fstabs
+
+ * Flash the zip chosen by the user,
+    placed in install/install.zip,
+    with support to systemless boot
+
+ * Rebuild the original bootimage
+    with the newly introduced changes
