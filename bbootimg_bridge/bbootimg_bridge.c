@@ -83,7 +83,7 @@ int bbootimg_bridge(const char* import_path, const char* export_path)
     }
 
     strcpy((char*)img.hdr.cmdline, cmdline);
-    img.hdr_elf->cmd_size = strlen(cmdline);
+    img.hdr_info->cmdline_size = strlen(cmdline);
 
     strcpy(tmp, export_path);
     strcat(tmp, ".new");

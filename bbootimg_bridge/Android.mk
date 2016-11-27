@@ -14,7 +14,9 @@ LOCAL_MODULE_TAGS := eng
 
 LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)
 LOCAL_UNSTRIPPED_PATH := $(TARGET_ROOT_OUT_UNSTRIPPED)
-LOCAL_STATIC_LIBRARIES := libcutils libc libmultirom_static libbootimg
 LOCAL_FORCE_STATIC_EXECUTABLE := true
+
+LOCAL_CFLAGS := -DDEBUG_KMSG
+LOCAL_STATIC_LIBRARIES := libc libmultirom_static libbootimg libcutils
 
 include $(BUILD_EXECUTABLE)
