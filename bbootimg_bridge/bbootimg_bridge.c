@@ -49,9 +49,17 @@ int bbootimg_bridge(const char* import_path, const char* export_path)
         goto exit;
     }
 
-    if (libbootimg_dump_second(&img, "tmp_second") < 0)
+    if (*(img.blobs[LIBBOOTIMG_BLOB_SECOND].size) != 0 &&
+            libbootimg_dump_second(&img, "tmp_second") < 0)
     {
         printf("Failed to dump the second from %s to tmp_second!\n", import_path);
+        goto exit;
+    }
+
+    if (*(img.blobs[LIBBOOTIMG_BLOB_DTB].size) != 0 &&
+            libbootimg_dump_dtb(&img, "tmp_dtb") < 0)
+    {
+        printf("Failed to dump the dtb from %s to tmp_dtb!\n", import_path);
         goto exit;
     }
 
@@ -76,9 +84,17 @@ int bbootimg_bridge(const char* import_path, const char* export_path)
         goto exit;
     }
 
-    if (libbootimg_load_second(&img, "tmp_second") < 0)
+    if (*(img.blobs[LIBBOOTIMG_BLOB_SECOND].size) != 0 &&
+            libbootimg_load_second(&img, "tmp_second") < 0)
     {
         printf("Failed to import the second from tmp_second to %s!\n", export_path);
+        goto exit;
+    }
+
+    if (*(img.blobs[LIBBOOTIMG_BLOB_DTB].size) != 0 &&
+            libbootimg_load_dtb(&img, "tmp_dtb") < 0)
+    {
+        printf("Failed to import the dtb from tmp_dtb to %s!\n", export_path);
         goto exit;
     }
 
