@@ -12,6 +12,12 @@
     a normal bootimage, edit it
     then update the Sony ELF boot
 
+ * With support for newer ELF bootimages
+    like on the Sony Xperia Z2, BootBridge
+    will perform the same tasks, but also
+    recreate a regular Android bootimage
+    that will allow the device to boot
+
 ## Where does the user have to do something
 
  * Simply open the zip, and replace the
