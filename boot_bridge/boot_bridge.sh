@@ -7,34 +7,31 @@
 BOOTIMAGE_KERNEL=;
 BOOTIMAGE_TEMPLATE=;
 BRIDGE_CREATED=;
-PARTITION_LINK=;
 RESULT=;
 
 # Bootimage detection based on the find_boot_image logic by Chainfire
 for PARTITION in kern-a KERN-A Kernel kernel KERNEL boot BOOT lnx LNX; do
-  PARTITION_LINK=/dev/block/by-name/${PARTITION};
-  if [ -L ${PARTITION_LINK} ] && [ -e ${PARTITION_LINK} ]; then
-    BOOTIMAGE_KERNEL=$(readlink ${PARTITION_LINK});
+  BOOTIMAGE_KERNEL=/dev/block/by-name/${PARTITION};
+  if [ -L ${BOOTIMAGE_KERNEL} ] && [ -e ${BOOTIMAGE_KERNEL} ]; then
     break;
   fi;
-  PARTITION_LINK=/dev/block/platform/*/by-name/${PARTITION};
-  if [ -L ${PARTITION_LINK} ] && [ -e ${PARTITION_LINK} ]; then
-    BOOTIMAGE_KERNEL=$(readlink ${PARTITION_LINK});
+  BOOTIMAGE_KERNEL=/dev/block/platform/*/by-name/${PARTITION};
+  if [ -L ${BOOTIMAGE_KERNEL} ] && [ -e ${BOOTIMAGE_KERNEL} ]; then
     break;
   fi;
-  PARTITION_LINK=/dev/block/platform/*/*/by-name/${PARTITION};
-  if [ -L ${PARTITION_LINK} ] && [ -e ${PARTITION_LINK} ]; then
-    BOOTIMAGE_KERNEL=$(readlink ${PARTITION_LINK});
+  BOOTIMAGE_KERNEL=/dev/block/platform/*/*/by-name/${PARTITION};
+  if [ -L ${BOOTIMAGE_KERNEL} ] && [ -e ${BOOTIMAGE_KERNEL} ]; then
     break;
   fi;
 done;
 
 # Bootimage template linkage
-BOOTIMAGE_TEMPLATE=$(find ${PARTITION_LINK%/*} -print -maxdepth 0)/android_boot;
+BOOTIMAGE_KERNEL=$(find ${BOOTIMAGE_KERNEL} -print -maxdepth 0 | head -n 1)
+BOOTIMAGE_TEMPLATE=${BOOTIMAGE_KERNEL%/*}/android_boot;
 
 # Bootimage not found
 if [ -z "${BOOTIMAGE_KERNEL}" ] || [ -z "${BOOTIMAGE_TEMPLATE}" ]; then
-  return -1;
+  return 1;
 fi;
 
 # Bridge mode detection
