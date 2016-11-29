@@ -1,0 +1,47 @@
+ui_print(" ");
+ui_print(" ");
+ui_print(" =================================");
+ui_print(" | Bootimage Bridge for Sony ELF |");
+ui_print(" |        Adrian DC - 2016       |");
+ui_print(" =================================");
+ui_print(" ");
+ui_print(" Usage:");
+ui_print("  - Replace the zip you wish to flash");
+ui_print("     in install/install.zip");
+ui_print("  - Flash the BootBridge zip");
+ui_print(" ");
+ui_print(" Installation:");
+
+show_progress(1.000000, 0);
+ui_print("  - Extracting the script files...");
+delete_recursive("/tmp/boot_bridge");
+package_extract_dir("scripts", "/tmp/boot_bridge/");
+set_perm(0, 0, 0777, "/tmp/boot_bridge/boot_bridge");
+set_perm(0, 0, 0777, "/tmp/boot_bridge/boot_bridge.sh");
+set_perm(0, 0, 0777, "/tmp/boot_bridge/flash_zip.sh");
+set_perm(0, 0, 0777, "/tmp/boot_bridge/toybox");
+
+set_progress(0.200000);
+ui_print("  - Preparing the boot bridge...");
+assert(run_program("/tmp/boot_bridge/boot_bridge.sh", "init") == 0);
+
+set_progress(0.400000);
+ui_print(" ");
+ui_print("  - Flashing the install.zip...");
+package_extract_dir("install", "/tmp/boot_bridge/");
+assert(run_program("/tmp/boot_bridge/flash_zip.sh", "/tmp/boot_bridge", "install.zip") == 0);
+ui_print(" ");
+
+set_progress(0.600000);
+ui_print("  - Restoring the boot bridge...");
+assert(run_program("/tmp/boot_bridge/boot_bridge.sh") == 0);
+
+set_progress(0.800000);
+ui_print("  - Cleaning temporary files...");
+delete_recursive("/tmp/boot_bridge");
+
+set_progress(1.000000);
+ui_print(" ");
+ui_print("  Installation completed!");
+ui_print(" ");
+
