@@ -37,6 +37,9 @@ if [ ! -d "${INSTALL_TMP}" ] || [ ! -f "${INSTALL_TMP}/${INSTALL_ZIP}" ]; then
   ui_print ' ';
   ui_print ' Error in flash_zip: Missing inputs';
   ui_print ' ';
+
+  # Launch boot_bridge cleanup
+  /tmp/boot_bridge/boot_bridge.sh 'failed' "${RESULT}";
   return 1;
 fi;
 
@@ -45,6 +48,9 @@ if ! unzip -oq ${INSTALL_TMP}/${INSTALL_ZIP} ${UPDATE_BINARY_PATH} -d ${INSTALL_
   ui_print ' ';
   ui_print ' Error in flash_zip: unzip failed';
   ui_print ' ';
+
+  # Launch boot_bridge cleanup
+  /tmp/boot_bridge/boot_bridge.sh 'failed' "${RESULT}";
   return 2;
 fi;
 
@@ -54,6 +60,11 @@ chmod 755 ${UPDATE_BINARY_TMP};
 # Update execution
 ${UPDATE_BINARY_TMP} 3 ${OUTFD:-0} ${INSTALL_TMP}/${INSTALL_ZIP};
 RESULT=${?};
+
+# Launch boot_bridge cleanup
+if [ ${RESULT} -ne 0 ]; then
+  /tmp/boot_bridge/boot_bridge.sh 'failed' "${RESULT}";
+fi;
 
 # Result output
 return ${RESULT};
