@@ -26,8 +26,9 @@ for PARTITION in kern-a KERN-A Kernel kernel KERNEL boot BOOT lnx LNX; do
 done;
 
 # Bootimage template linkage
-BOOTIMAGE_PATH=$(find ${BOOTIMAGE_PATH} -print -maxdepth 0 | head -n 1)
+BOOTIMAGE_PATH=$(find ${BOOTIMAGE_PATH} -print -maxdepth 0 | head -n 1);
 BOOTIMAGE_ORIGINAL=${BOOTIMAGE_PATH%/*}/boot_original.img;
+BOOTIMAGE_BRIDGE=${BOOTIMAGE_PATH%/*}/android_boot;
 
 # Bootimage not found
 if [ -z "${BOOTIMAGE_PATH}" ] || [ -z "${BOOTIMAGE_ORIGINAL}" ]; then
@@ -53,6 +54,9 @@ if [ -z "${BRIDGE_CREATED}" ]; then
   dd if=/dev/zero of="${BOOTIMAGE_PATH}";
   dd if=/tmp/boot_bridge/boot_template.img of="${BOOTIMAGE_PATH}";
 
+  # Bridge symlink creation
+  ln -fs $(readlink -f ${BOOTIMAGE_PATH}) ${BOOTIMAGE_BRIDGE};
+
   # Transfer to template bootimage
   chmod 755 /tmp/boot_bridge/boot_bridge;
   /tmp/boot_bridge/boot_bridge --import="${BOOTIMAGE_ORIGINAL}" --export="${BOOTIMAGE_PATH}";
@@ -63,6 +67,7 @@ if [ -z "${BRIDGE_CREATED}" ]; then
     dd if=/dev/zero of="${BOOTIMAGE_PATH}";
     dd if="${BOOTIMAGE_ORIGINAL}" of="${BOOTIMAGE_PATH}";
     rm -f "${BOOTIMAGE_ORIGINAL}";
+    rm -f "${BOOTIMAGE_BRIDGE}";
   fi;
 
 # Bridge restore
@@ -79,6 +84,7 @@ else
   dd if=/dev/zero of="${BOOTIMAGE_PATH}";
   dd if="${BOOTIMAGE_ORIGINAL}" of="${BOOTIMAGE_PATH}";
   rm -f "${BOOTIMAGE_ORIGINAL}";
+  rm -f "${BOOTIMAGE_BRIDGE}";
 
 fi;
 
