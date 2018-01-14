@@ -23,7 +23,16 @@ for PARTITION in kern-a KERN-A Kernel kernel KERNEL boot BOOT lnx LNX; do
   if [ -L ${BOOTIMAGE_PATH} ] && [ -e ${BOOTIMAGE_PATH} ]; then
     break;
   fi;
+  BOOTIMAGE_PATH=;
 done;
+
+# Bootimage recovery detection
+if [ -z "${BOOTIMAGE_PATH}" ]; then
+  BOOTIMAGE_PATH=$(grep '/boot' /etc/recovery.fstab \
+                 | head -n 1 \
+                 | xargs -n 1 echo \
+                 | grep /dev);
+fi;
 
 # Bootimage template linkage
 BOOTIMAGE_PATH=$(find ${BOOTIMAGE_PATH} -print -maxdepth 0 | head -n 1);
