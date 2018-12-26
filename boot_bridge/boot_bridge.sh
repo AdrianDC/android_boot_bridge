@@ -37,7 +37,7 @@ fi;
 # Bootimage template linkage
 BOOTIMAGE_PATH=$(find ${BOOTIMAGE_PATH} -print -maxdepth 0 | head -n 1);
 BOOTIMAGE_ORIGINAL=${BOOTIMAGE_PATH%/*}/boot_original.img;
-BOOTIMAGE_BRIDGE=${BOOTIMAGE_PATH%/*}/android_boot;
+BOOTIMAGE_BRIDGE=${BOOTIMAGE_PATH%/*}/boot;
 
 # Bootimage not found
 if [ -z "${BOOTIMAGE_PATH}" ] || [ -z "${BOOTIMAGE_ORIGINAL}" ]; then
